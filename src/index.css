@@ -1,0 +1,259 @@
+@import '../node_modules/twikoo/dist/twikoo.css';
+
+/* 清松手写体 (QingSong Handwritten) — SIL OFL, free commercial use */
+
+/* 霞鹜文楷 LXGW WenKai + JetBrains Mono via CDN */
+@import url('https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-regular.css');
+@import url('https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-bold.css');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap');
+
+@font-face {
+  font-family: 'QingSong';
+  src: url('https://cdn.jsdelivr.net/gh/lxgw/qingsonghandwrite@latest/dist/QingSongShouXieTi-2.0.ttf') format('truetype');
+  font-display: swap;
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'QingSong';
+  src: url('https://cdn.jsdelivr.net/gh/lxgw/qingsonghandwrite@latest/dist/QingSongShouXieTi-Bold-2.0.ttf') format('truetype');
+  font-display: swap;
+  font-weight: bold;
+  font-style: normal;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: #121214;
+    color: #e6e2d8;
+    font-family: 'LXGW WenKai', 'Noto Serif SC', serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  ::selection {
+    background: rgba(85, 107, 84, 0.3);
+    color: #e6e2d8;
+  }
+}
+
+@layer utilities {
+  /* Film grain overlay */
+  .film-grain::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    animation: grain 0.5s steps(2) infinite;
+  }
+
+  @keyframes grain {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-2px, 1px); }
+  }
+
+  /* Darkroom photo filter — disabled, showing original colors */
+  .darkroom-img {
+    filter: none;
+  }
+  .darkroom-img-hover {
+    filter: none;
+  }
+
+  /* Hand-developed title effect: ink bleed + grain mask */
+  .develop-title {
+    text-shadow:
+      0 0 1px rgba(230, 226, 216, 0.5),
+      0.5px 0.5px 0 rgba(85, 107, 84, 0.15),
+      -0.3px -0.3px 0.5px rgba(230, 226, 216, 0.08);
+    filter: url(#develop-distort);
+  }
+
+  .develop-accent {
+    text-shadow:
+      0 0 2px rgba(85, 107, 84, 0.4),
+      0 0 8px rgba(85, 107, 84, 0.15);
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Masonry layout using CSS multi-column */
+  .masonry-2 {
+    column-count: 1;
+    column-gap: 1.5rem;
+  }
+  .masonry-3 {
+    column-count: 1;
+    column-gap: 1.5rem;
+  }
+  @media (min-width: 768px) {
+    .masonry-2 { column-count: 2; }
+    .masonry-3 { column-count: 2; }
+  }
+  @media (min-width: 1024px) {
+    .masonry-3 { column-count: 3; }
+  }
+  .masonry-item {
+    break-inside: avoid;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+    width: 100%;
+  }
+
+  /* Natural-ratio media: no object-fit, no fixed height */
+  .natural-media {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Film strip perforations: repeating square holes on black bar */
+  .film-perforations {
+    background-image:
+      repeating-linear-gradient(
+        to right,
+        transparent 0,
+        transparent 6px,
+        #1a1a1d 6px,
+        #1a1a1d 14px,
+        transparent 14px,
+        transparent 20px
+      );
+    background-color: #0a0a0b;
+  }
+
+  /* Indicator dot blink — like a darkroom safelight */
+  @keyframes indicator-blink {
+    0%, 100% { opacity: 1; box-shadow: 0 0 6px 1px rgba(212, 165, 116, 0.6); }
+    50% { opacity: 0.25; box-shadow: 0 0 2px 0 rgba(212, 165, 116, 0.2); }
+  }
+  .indicator-dot {
+    animation: indicator-blink 2s ease-in-out infinite;
+  }
+
+  /* Realistic film grain texture for film strips */
+  .film-grain-overlay {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='nF'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nF)'/%3E%3C/svg%3E");
+    background-size: 150px 150px;
+    animation: grain 0.6s steps(3) infinite;
+  }
+
+  .film-hanging-strip {
+    transform-origin: top center;
+  }
+
+  /* Film photo wall — casually hung scattered photo layout */
+  .film-photo-wall {
+    column-count: 2;
+    column-gap: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .film-photo-wall { column-count: 3; }
+  }
+  @media (min-width: 1280px) {
+    .film-photo-wall { column-count: 4; }
+  }
+
+  .film-photo-card {
+    break-inside: avoid;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 1.25rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  .film-photo-card:nth-child(8n+1) { transform: rotate(-3deg); }
+  .film-photo-card:nth-child(8n+2) { transform: rotate(2deg); }
+  .film-photo-card:nth-child(8n+3) { transform: rotate(-1.5deg); }
+  .film-photo-card:nth-child(8n+4) { transform: rotate(4deg); }
+  .film-photo-card:nth-child(8n+5) { transform: rotate(-2.5deg); }
+  .film-photo-card:nth-child(8n+6) { transform: rotate(1deg); }
+  .film-photo-card:nth-child(8n+7) { transform: rotate(-4deg); }
+  .film-photo-card:nth-child(8n+8) { transform: rotate(3deg); }
+
+  .film-photo-card:hover {
+    transform: scale(1.05) rotate(0deg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    position: relative;
+    z-index: 10;
+  }
+
+  @media (max-width: 767px) {
+    .film-photo-card:nth-child(8n+1) { transform: rotate(-1.5deg); }
+    .film-photo-card:nth-child(8n+2) { transform: rotate(1deg); }
+    .film-photo-card:nth-child(8n+3) { transform: rotate(-0.5deg); }
+    .film-photo-card:nth-child(8n+4) { transform: rotate(2deg); }
+    .film-photo-card:nth-child(8n+5) { transform: rotate(-1deg); }
+    .film-photo-card:nth-child(8n+6) { transform: rotate(0.5deg); }
+    .film-photo-card:nth-child(8n+7) { transform: rotate(-2deg); }
+    .film-photo-card:nth-child(8n+8) { transform: rotate(1.5deg); }
+  }
+
+  /* Vertical sprocket rail for archive timelines */
+  .film-sprocket-rail {
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 10px,
+        rgba(8, 8, 9, 0.95) 10px,
+        rgba(8, 8, 9, 0.95) 18px,
+        transparent 18px,
+        transparent 30px
+      ),
+      linear-gradient(to right, rgba(75, 61, 40, 0.35), rgba(25, 22, 17, 0.7), rgba(75, 61, 40, 0.35));
+    box-shadow: inset 1px 0 rgba(212, 165, 116, 0.08), inset -1px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  /* Chemical development stains */
+  .film-stains {
+    background:
+      radial-gradient(ellipse 40px 25px at 15% 30%, rgba(180, 140, 90, 0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 30px 20px at 75% 60%, rgba(120, 100, 70, 0.06) 0%, transparent 55%),
+      radial-gradient(ellipse 50px 30px at 50% 85%, rgba(160, 130, 80, 0.05) 0%, transparent 50%);
+  }
+
+  /* Darkroom background atmospheric stains */
+  .darkroom-atmosphere {
+    background:
+      radial-gradient(ellipse 600px 400px at 10% 20%, rgba(85, 107, 84, 0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 500px 350px at 85% 70%, rgba(180, 140, 90, 0.04) 0%, transparent 55%),
+      radial-gradient(ellipse 400px 300px at 50% 50%, rgba(60, 70, 60, 0.05) 0%, transparent 50%),
+      radial-gradient(ellipse 300px 200px at 70% 15%, rgba(140, 110, 70, 0.03) 0%, transparent 50%);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #121214;
+}
+::-webkit-scrollbar-thumb {
+  background: #2e2e32;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #556b54;
+}
